@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - master
+
+pool: 
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: ts-stg-vars
+
+steps:
+- script: |
+    sed -i '/DATABASE_HOST/c\DATABASE_HOST=$(database_host)' ./env-example
+    sed -i '/DATABASE_NAME/c\DATABASE_NAME=$(database_name)' ./env-example
+    sed -i '/DATABASE_USERNAME/c\DATABASE_USERNAME=$(database_user)'  ./env-example
+    sed -i '/DATABASE_PASSWORD/c\DATABASE_PASSWORD=$(database_password)' ./env-example
+    docker build -t $(dockerID).azurecr.io/$(apiImageName):stg  .
+    docker login -u $(dockerPassword) -p $(dockerPassword) $(dockerID).azurecr.io
+    docker push $(dockerID).azurecr.io/$(apiImageName):stg
+  displayName: 'TS Backend Build'
+
+- task: DownloadSecureFile@1
+  name: keytodev
+  displayName: 'Download the Key to dev'
+  inputs:
+    secureFile: 'keytodev'
+
+- script: |
+    sudo chmod 400 $(keytodev.secureFilePath)
+    sudo mv $(keytodev.secureFilePath) /tmp/keytodev
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: ssh -o StrictHostKeyChecking=no -i /tmp/keytodev root@ts-stg.codeskimmer.com '/opt/projects/T-Signal/update.sh'
