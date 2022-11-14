@@ -16,7 +16,7 @@ steps:
     sed -i '/DATABASE_USERNAME/c\DATABASE_USERNAME=$(database_user)'  ./env-example
     sed -i '/DATABASE_PASSWORD/c\DATABASE_PASSWORD=$(database_password)' ./env-example
     docker build -t $(dockerID).azurecr.io/$(apiImageName):stg  .
-    docker login -u $(dockerPassword) -p $(dockerPassword) $(dockerID).azurecr.io
+    docker login -u $(dockerUser) -p $(dockerPassword) $(dockerID).azurecr.io
     docker push $(dockerID).azurecr.io/$(apiImageName):stg
   displayName: 'TS Backend Build'
 
