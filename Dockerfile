@@ -14,6 +14,6 @@ RUN cp -a /tmp/app/node_modules /usr/src/app
 
 WORKDIR /usr/src/app
 RUN rm -rf .env && cp env-example .env
-RUN npm run build
+RUN npm run start:dev
 
 CMD ["/bin/bash", "./startup.dev.sh"]
