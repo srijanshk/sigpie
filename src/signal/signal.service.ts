@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { TradingViewLog } from 'src/tradingViewLog/entities/Trading-view.entity';
+import { TradingViewLog } from 'src/tradingViewLog/entities/trading-view.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
