@@ -1,10 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { TradingViewLogService } from 'src/tradingViewLog/trading-view-log.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { TradingViewLog } from './entities/trading-view.entity';
 
 @Injectable()
-export class SignalService {
-  constructor(private tradingViewLogService: TradingViewLogService) {}
-  async getSignalFromTA(data: any) {
+export class TradingViewLogService {
+
+  constructor(
+    @InjectRepository(TradingViewLog)
+    private tradingViewRepository: Repository<TradingViewLog>
+  ) {}
+  
+  async create(data: any) {
     try {
       // if (data.auth) {
       //   console.log(data)
@@ -17,7 +24,8 @@ export class SignalService {
       //     HttpStatus.UNAUTHORIZED,
       //   );
       // }
-      await this.tradingViewLogService.create(data);
+      this.tradingViewRepository.create({meta: data})
+
     } catch (error) {
       throw new HttpException(
         {

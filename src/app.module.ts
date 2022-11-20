@@ -28,6 +28,7 @@ import { MailModule } from './mail/mail.module';
 import { HomeModule } from './home/home.module';
 import { DataSource } from 'typeorm';
 import { SignalModule } from './signal/signal.module';
+import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
 
 @Module({
   imports: [
@@ -84,6 +85,7 @@ import { SignalModule } from './signal/signal.module';
     MailModule,
     HomeModule,
     SignalModule,
+    TradingViewLogModule
   ],
 })
 export class AppModule {}
