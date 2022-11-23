@@ -29,18 +29,13 @@ export class AuthService {
 
   async validateLogin(
     loginDto: AuthEmailLoginDto,
-    onlyAdmin: boolean,
   ): Promise<{ token: string; user: User }> {
     const user = await this.usersService.findOne({
       email: loginDto.email,
     });
 
     if (
-      !user ||
-      (user &&
-        !(onlyAdmin ? [RoleEnum.admin] : [RoleEnum.user]).includes(
-          user.role.id,
-        ))
+      !user
     ) {
       throw new HttpException(
         {

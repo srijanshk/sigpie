@@ -24,7 +24,15 @@ export class TradingViewLogService {
       //     HttpStatus.UNAUTHORIZED,
       //   );
       // }
-      this.tradingViewRepository.create({meta: data})
+      console.log(data)
+      const payload = {
+        meta: data
+      }
+
+      return this.tradingViewRepository.save(
+        this.tradingViewRepository.create(payload)
+      )
+      
 
     } catch (error) {
       throw new HttpException(

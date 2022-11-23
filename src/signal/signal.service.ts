@@ -17,6 +17,7 @@ export class SignalService {
       //     HttpStatus.UNAUTHORIZED,
       //   );
       // }
+      console.log(data)
       await this.tradingViewLogService.create(data);
     } catch (error) {
       throw new HttpException(
