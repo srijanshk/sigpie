@@ -1,4 +1,3 @@
-import { Status } from 'src/statuses/entities/status.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityHelper } from 'src/utils/entity-helper';
 import {
@@ -6,33 +5,29 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Signal } from './signal.entity';
 
 @Entity()
-export class SignalData extends EntityHelper {
+export class UserSignalToken extends EntityHelper {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false })
-  ticker: string;
+  @ManyToOne(() => User, {
+    eager: true,
+  })
+  user: User;
+
+  @ManyToOne(() => Signal, {
+    eager: true,
+  })
+  signal: Signal;
 
   @Column({ nullable: false })
-  actionType: string;
-  
-  @Column({ nullable: false })
-  OrderType: string;
-
-  @Column({ nullable: false })
-  stopLoss: string;
-  
-  @Column({ nullable: false })
-  takeProfit: string;
-
-  @Column({ type: 'json', nullable: true })
-  meta: any;
+  token: string;
 
   @CreateDateColumn()
   createdAt: Date;

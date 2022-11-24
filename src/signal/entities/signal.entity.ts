@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -52,7 +53,8 @@ export class Signal extends EntityHelper {
   @OneToOne(() => SignalData, {
     eager: true,
   })
-  signalData?: SignalData;
+  @JoinColumn()
+  signalData: SignalData;
 
   @CreateDateColumn()
   createdAt: Date;
