@@ -1,4 +1,4 @@
-import { Status } from 'src/statuses/entities/status.entity';
+import { Signal } from 'src/signal/entities/signal.entity';
 import { User } from 'src/users/entities/user.entity';
 import { EntityHelper } from 'src/utils/entity-helper';
 import {
@@ -6,8 +6,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -18,7 +18,17 @@ export class TradingViewLog extends EntityHelper {
   id: number;
 
   @Column({ type: 'json', nullable: true })
-  meta: any;
+  meta: any | null;
+
+  @ManyToOne(() => User, {
+    eager: true,
+  })
+  user: User;
+
+  @ManyToOne(() => Signal, {
+    eager: true,
+  })
+  signal: Signal;
 
   @CreateDateColumn()
   createdAt: Date;

@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CreateTradingViewLog } from 'src/signal/dto/trading-view-log.dto';
 import { Repository } from 'typeorm';
 import { TradingViewLog } from './entities/trading-view.entity';
 
@@ -11,26 +12,10 @@ export class TradingViewLogService {
     private tradingViewRepository: Repository<TradingViewLog>
   ) {}
   
-  async create(data: any) {
+  async create(data: CreateTradingViewLog) {
     try {
-      // if (data.auth) {
-      //   console.log(data)
-      // } else {
-      //   throw new HttpException(
-      //     {
-      //       status: HttpStatus.UNAUTHORIZED,
-      //       errors: "Auth Not Found"
-      //     },
-      //     HttpStatus.UNAUTHORIZED,
-      //   );
-      // }
-      console.log(data)
-      const payload = {
-        meta: data
-      }
-
       return this.tradingViewRepository.save(
-        this.tradingViewRepository.create(payload)
+        this.tradingViewRepository.create({...data})
       )
       
 

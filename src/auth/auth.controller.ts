@@ -34,12 +34,6 @@ export class AuthController {
     return this.service.validateLogin(loginDto);
   }
 
-  // @Post('admin/email/login')
-  // @HttpCode(HttpStatus.OK)
-  // public async adminLogin(@Body() loginDTO: AuthEmailLoginDto) {
-  //   return this.service.validateLogin(loginDTO);
-  // }
-
   @Post('email/register')
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() createUserDto: AuthRegisterLoginDto) {

@@ -301,4 +301,11 @@ export class AuthService {
   async softDelete(user: User): Promise<void> {
     await this.usersService.softDelete(user.id);
   }
+
+  createToken(userId: number, signalId: number) {
+    return this.jwtService.sign({
+      id: userId,
+      role: signalId,
+    });
+  }
 }

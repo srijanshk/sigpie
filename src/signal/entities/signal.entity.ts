@@ -43,7 +43,7 @@ export class Signal extends EntityHelper {
   winRate?: number | null;
 
   @Column({ type: "enum" , enum: SignalPrivacy, nullable: false })
-  privacy: SignalPrivacy
+  privacy: string;
 
   @ManyToOne(() => Status, {
     eager: true,

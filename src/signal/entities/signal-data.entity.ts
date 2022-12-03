@@ -9,7 +9,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Signal } from './signal.entity';
 
 @Entity()
 export class SignalData extends EntityHelper {
@@ -23,13 +22,13 @@ export class SignalData extends EntityHelper {
   actionType: string;
   
   @Column({ nullable: false })
-  OrderType: string;
+  orderType: string;
 
   @Column({ nullable: false })
-  stopLoss: string;
+  stopLoss: number;
   
   @Column({ nullable: false })
-  takeProfit: string;
+  takeProfit: number;
 
   @Column({ type: 'json', nullable: true })
   meta: any;
