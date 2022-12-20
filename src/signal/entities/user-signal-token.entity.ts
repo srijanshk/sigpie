@@ -1,4 +1,14 @@
-import { BelongsTo, Column, CreatedAt, DataType, DeletedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { User } from 'src/users/entities/user.entity';
 import { Signal } from './signal.entity';
 
@@ -12,7 +22,7 @@ export class UserSignalToken extends Model<UserSignalToken> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  userId: number
+  userId: number;
 
   @BelongsTo(() => User)
   user: User;

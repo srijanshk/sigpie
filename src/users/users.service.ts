@@ -22,7 +22,7 @@ export class UsersService {
   }
 
   findAll() {
-    return this.usersModel.findAll()
+    return this.usersModel.findAll();
   }
 
   async update(id: number, updateProfileDto: UpdateUserDto) {
@@ -32,7 +32,7 @@ export class UsersService {
       },
       { where: { id: id } },
     );
-    return this.findOne({ id: id});
+    return this.findOne({ id: id });
   }
 
   async softDelete(id: number): Promise<void> {

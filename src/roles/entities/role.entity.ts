@@ -1,4 +1,4 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo  } from 'sequelize-typescript';
+import { Table, Column, Model, DataType } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
 

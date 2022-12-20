@@ -6,7 +6,6 @@ import { Signal } from './entities/signal.entity';
 import { SignalData } from './entities/signal-data.entity';
 import { UserSignalToken } from './entities/user-signal-token.entity';
 import { AuthModule } from 'src/auth/auth.module';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseModule } from 'src/database/database.module';
 
 @Module({

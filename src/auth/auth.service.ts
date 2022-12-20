@@ -34,9 +34,7 @@ export class AuthService {
       email: loginDto.email,
     });
 
-    if (
-      !user
-    ) {
+    if (!user) {
       throw new HttpException(
         {
           status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -148,7 +146,7 @@ export class AuthService {
       .update(randomStringGenerator())
       .digest('hex');
 
-    const user = await this.usersService.create({
+    await this.usersService.create({
       ...dto,
       email: dto.email,
       roleId: RoleEnum.user,

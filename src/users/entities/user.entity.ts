@@ -9,14 +9,13 @@ import {
   DeletedAt,
   UpdatedAt,
   BeforeCreate,
-  BeforeUpdate
+  BeforeUpdate,
 } from 'sequelize-typescript';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
 import { File } from '../../files/entities/file.entity';
 import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
 import * as bcrypt from 'bcryptjs';
-
 
 @Table({ tableName: 'users' })
 export class User extends Model<User> {
@@ -25,6 +24,9 @@ export class User extends Model<User> {
 
   @Column({ type: DataType.STRING, unique: true, allowNull: false })
   email: string;
+
+  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  userName: string;
 
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;

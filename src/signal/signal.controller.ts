@@ -1,7 +1,17 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { CreateSignalDto, CreateSignalPayload } from './dto/create-signal.dto';
+import { CreateSignalPayload } from './dto/create-signal.dto';
 import { TradingViewLogInput } from './dto/trading-view-log.dto';
 import { SignalService } from './signal.service';
 

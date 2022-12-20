@@ -1,15 +1,6 @@
 import { Transform } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../roles/entities/role.entity';
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsOptional,
-  MinLength,
-  Validate,
-} from 'class-validator';
-import { Status } from '../../statuses/entities/status.entity';
-
+import { IsEmail, IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })
@@ -46,7 +37,6 @@ export class CreateUserDto {
   @ApiProperty({ example: 'id' })
   statusId?: number;
 
-  @ApiProperty({ example: 'crypto hash'})
+  @ApiProperty({ example: 'crypto hash' })
   hash?: string;
-
 }

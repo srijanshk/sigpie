@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseModule } from 'src/database/database.module';
 import { TradingViewLog } from './entities/trading-view.entity';
 import { TradingViewLogService } from './trading-view-log.service';

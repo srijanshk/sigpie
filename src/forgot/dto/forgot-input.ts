@@ -1,10 +1,9 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty } from '@nestjs/swagger';
 
+export class ForgotInput {
+  @ApiProperty({ example: 'hash' })
+  hash: string;
 
-export class ForgotInput { 
-    @ApiProperty({  example: "hash"})
-    hash: string;
-
-    @ApiProperty({ example: 'id' })
-    userId: number;
+  @ApiProperty({ example: 'id' })
+  userId: number;
 }

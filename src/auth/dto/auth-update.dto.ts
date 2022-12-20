@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, MinLength, Validate } from 'class-validator';
+import { IsNotEmpty, IsOptional, MinLength } from 'class-validator';
 import { File } from '../../files/entities/file.entity';
 
 export class AuthUpdateDto {

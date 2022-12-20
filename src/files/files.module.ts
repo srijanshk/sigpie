@@ -8,7 +8,6 @@ import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
 import { File } from './entities/file.entity';
 import { FilesService } from './files.service';
-import { SequelizeModule } from '@nestjs/sequelize';
 import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
@@ -87,6 +86,11 @@ import { DatabaseModule } from 'src/database/database.module';
     }),
   ],
   controllers: [FilesController],
-  providers: [ConfigModule, ConfigService, FilesService, { provide: 'File', useValue: File }],
+  providers: [
+    ConfigModule,
+    ConfigService,
+    FilesService,
+    { provide: 'File', useValue: File },
+  ],
 })
 export class FilesModule {}

@@ -2,11 +2,8 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { TradingViewLogService } from 'src/tradingViewLog/trading-view-log.service';
 import { User } from 'src/users/entities/user.entity';
-import { CreateSignalDto, CreateSignalPayload } from './dto/create-signal.dto';
-import {
-  CreateTradingViewLogInput,
-  TradingViewLogInput,
-} from './dto/trading-view-log.dto';
+import { CreateSignalPayload } from './dto/create-signal.dto';
+import { TradingViewLogInput } from './dto/trading-view-log.dto';
 import { SignalData } from './entities/signal-data.entity';
 import { Signal } from './entities/signal.entity';
 import { UserSignalToken } from './entities/user-signal-token.entity';
@@ -39,9 +36,7 @@ export class SignalService {
             userId: isExisting.user.id,
             signalId: isExisting.signal.id,
           };
-
-          console.log(payload);
-          this.tradingViewLogService.create(payload);
+          await this.tradingViewLogService.create(payload);
         }
       } else {
         throw new HttpException(
@@ -74,7 +69,9 @@ export class SignalService {
         takeProfit: createSignal.takeProfit,
       };
 
-      const signalData = await this.signalDataRepository.create({ ...dataPayload });
+      const signalData = await this.signalDataRepository.create({
+        ...dataPayload,
+      });
 
       if (signalData) {
         const payload = {
@@ -88,21 +85,19 @@ export class SignalService {
           statusId: createSignal.statusId,
         };
 
-        const signal = await this.signalRepository.create({...payload});
+        const signal = await this.signalRepository.create({ ...payload });
 
         if (signal) {
-          const token = this.authService.createToken(
-            signal.ownerId,
-            signal.id,
-          );
+          const token = this.authService.createToken(signal.ownerId, signal.id);
           const userTokenPayload = {
             userId: signal.ownerId,
             signalId: signal.id,
             token,
           };
 
-          const userSignalToken =
-            await this.signalUserTokenRepository.create({...userTokenPayload});
+          const userSignalToken = await this.signalUserTokenRepository.create({
+            ...userTokenPayload,
+          });
           return {
             signal: signal,
             token: userSignalToken.token,
@@ -123,12 +118,12 @@ export class SignalService {
   async getAllSignal(user: User): Promise<Signal[]> {
     return await this.signalRepository.findAll({
       where: {
-        ownerId: user.id
-      }
-    })
+        ownerId: user.id,
+      },
+    });
   }
 
   async getSignalById(id: number): Promise<Signal> {
-    return this.signalRepository.findOne({where: { id }})
+    return this.signalRepository.findOne({ where: { id } });
   }
 }

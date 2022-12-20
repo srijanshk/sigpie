@@ -11,24 +11,23 @@ import { User } from 'src/users/entities/user.entity';
 import { ConfigService } from './../shared/config/config.service';
 
 export const databaseProviders = [
-    {
-        provide: 'SEQUELIZE',
-        inject: [ConfigService],
-        imports: [SharedModule],
-        useFactory: async (configService: ConfigService) => {
-            const sequelize = new Sequelize(configService.sequelizeOrmConfig);
-            sequelize.addModels([
-                User,
-                Signal,
-                SignalData,
-                TradingViewLog,
-                Forgot,
-                File,
-                Status,
-                Role
-            ]);
-            await sequelize.sync();
-            return sequelize;
-        },
+  {
+    provide: 'SEQUELIZE',
+    inject: [ConfigService],
+    imports: [SharedModule],
+    useFactory: (configService: ConfigService) => {
+      const sequelize = new Sequelize(configService.sequelizeOrmConfig);
+      sequelize.addModels([
+        User,
+        Signal,
+        SignalData,
+        TradingViewLog,
+        Forgot,
+        File,
+        Status,
+        Role,
+      ]);
+      return sequelize;
     },
+  },
 ];

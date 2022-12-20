@@ -27,7 +27,6 @@ import { HomeModule } from './home/home.module';
 import { SignalModule } from './signal/signal.module';
 import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
 import { SharedModule } from './shared/shared.module';
-import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -81,8 +80,7 @@ import { DatabaseModule } from './database/database.module';
     MailModule,
     HomeModule,
     SignalModule,
-    TradingViewLogModule
-
+    TradingViewLogModule,
   ],
 })
 export class AppModule {}

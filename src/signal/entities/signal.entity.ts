@@ -1,12 +1,22 @@
-import { BelongsTo, Column, CreatedAt, DataType, DeletedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  DeletedAt,
+  ForeignKey,
+  Model,
+  Table,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { Status } from 'src/statuses/entities/status.entity';
 import { User } from 'src/users/entities/user.entity';
 import { SignalData } from './signal-data.entity';
 
 export enum SignalPrivacy {
-    Private = "private",
-    Public = "public",
-    Followers = "followers"
+  Private = 'private',
+  Public = 'public',
+  Followers = 'followers',
 }
 
 @Table({ tableName: 'signal' })
@@ -19,7 +29,7 @@ export class Signal extends Model<Signal> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  ownerId: number
+  ownerId: number;
 
   @BelongsTo(() => User)
   owner: User;
@@ -29,16 +39,19 @@ export class Signal extends Model<Signal> {
 
   @Column({ type: DataType.STRING, allowNull: true })
   signalDescription: string;
-  
-  @Column({ type: DataType.INTEGER, allowNull: true })
+
+  @Column({ type: DataType.FLOAT, allowNull: true })
   price: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: true })
+  @Column({ type: DataType.FLOAT, allowNull: true })
   winRate: number;
 
-  @Column({ type: DataType.ENUM({
-    values: ['public', 'private', 'followers']
-  }) , allowNull: false })
+  @Column({
+    type: DataType.ENUM({
+      values: ['public', 'private', 'followers'],
+    }),
+    allowNull: false,
+  })
   privacy: string;
 
   @ForeignKey(() => Status)
@@ -56,7 +69,7 @@ export class Signal extends Model<Signal> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  signalDataId: number
+  signalDataId: number;
 
   @BelongsTo(() => SignalData)
   signalData: SignalData;

@@ -17,10 +17,10 @@ export class ForgotService {
   }
 
   async create(data: ForgotInput) {
-    return this.forgotRepository.create({...data});
+    return this.forgotRepository.create({ ...data });
   }
 
   async softDelete(id: number): Promise<void> {
-    await this.forgotRepository.destroy({ where: { id }});
+    await this.forgotRepository.destroy({ where: { id } });
   }
 }

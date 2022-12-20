@@ -30,7 +30,7 @@ import { DatabaseModule } from 'src/database/database.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [ AuthService, JwtStrategy, AnonymousStrategy],
+  providers: [AuthService, JwtStrategy, AnonymousStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
