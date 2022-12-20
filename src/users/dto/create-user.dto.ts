@@ -9,54 +9,44 @@ import {
   Validate,
 } from 'class-validator';
 import { Status } from '../../statuses/entities/status.entity';
-import { IsNotExist } from '../../utils/validators/is-not-exists.validator';
-import { FileEntity } from '../../files/entities/file.entity';
-import { IsExist } from '../../utils/validators/is-exists.validator';
+
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })
   @Transform(({ value }) => value?.toLowerCase().trim())
   @IsNotEmpty()
-  @Validate(IsNotExist, ['User'], {
-    message: 'emailAlreadyExists',
-  })
   @IsEmail()
-  email: string | null;
+  email: string;
 
   @ApiProperty()
   @MinLength(6)
   password?: string;
 
+  @ApiProperty()
   provider?: string;
 
-  socialId?: string | null;
+  @ApiProperty()
+  socialId?: string;
 
   @ApiProperty({ example: 'John' })
   @IsNotEmpty()
-  firstName: string | null;
+  firstName: string;
 
   @ApiProperty({ example: 'Doe' })
   @IsNotEmpty()
-  lastName: string | null;
+  lastName: string;
 
-  @ApiProperty({ type: () => FileEntity })
+  @ApiProperty({ example: 'id' })
   @IsOptional()
-  @Validate(IsExist, ['FileEntity', 'id'], {
-    message: 'imageNotExists',
-  })
-  photo?: FileEntity | null;
+  photoId?: string;
 
-  @ApiProperty({ type: Role })
-  @Validate(IsExist, ['Role', 'id'], {
-    message: 'roleNotExists',
-  })
-  role?: Role | null;
+  @ApiProperty({ example: 'id' })
+  roleId: number;
 
-  @ApiProperty({ type: Status })
-  @Validate(IsExist, ['Status', 'id'], {
-    message: 'statusNotExists',
-  })
-  status?: Status;
+  @ApiProperty({ example: 'id' })
+  statusId?: number;
 
-  hash?: string | null;
+  @ApiProperty({ example: 'crypto hash'})
+  hash?: string;
+
 }

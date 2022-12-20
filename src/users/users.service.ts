@@ -1,8 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EntityCondition } from 'src/utils/types/entity-condition.type';
-import { IPaginationOptions } from 'src/utils/types/pagination-options';
-import { Repository } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { WhereOptions } from 'sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -10,39 +7,35 @@ import { User } from './entities/user.entity';
 @Injectable()
 export class UsersService {
   constructor(
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @Inject('User')
+    private usersModel: typeof User,
   ) {}
 
   create(createProfileDto: CreateUserDto) {
-    return this.usersRepository.save(
-      this.usersRepository.create(createProfileDto),
-    );
+    return this.usersModel.create({ ...createProfileDto });
   }
 
-  findManyWithPagination(paginationOptions: IPaginationOptions) {
-    return this.usersRepository.find({
-      skip: (paginationOptions.page - 1) * paginationOptions.limit,
-      take: paginationOptions.limit,
-    });
-  }
-
-  findOne(fields: EntityCondition<User>) {
-    return this.usersRepository.findOne({
+  findOne(fields: WhereOptions) {
+    return this.usersModel.findOne({
       where: fields,
     });
   }
 
-  update(id: number, updateProfileDto: UpdateUserDto) {
-    return this.usersRepository.save(
-      this.usersRepository.create({
-        id,
+  findAll() {
+    return this.usersModel.findAll()
+  }
+
+  async update(id: number, updateProfileDto: UpdateUserDto) {
+    await this.usersModel.update(
+      {
         ...updateProfileDto,
-      }),
+      },
+      { where: { id: id } },
     );
+    return this.findOne({ id: id});
   }
 
   async softDelete(id: number): Promise<void> {
-    await this.usersRepository.softDelete(id);
+    await this.usersModel.destroy({ where: { id } });
   }
 }

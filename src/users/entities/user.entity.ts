@@ -1,90 +1,91 @@
 import {
+  Table,
   Column,
-  AfterLoad,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-  BeforeInsert,
-  BeforeUpdate,
-} from 'typeorm';
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  CreatedAt,
+  DeletedAt,
+  UpdatedAt,
+  BeforeCreate,
+  BeforeUpdate
+} from 'sequelize-typescript';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
-import { FileEntity } from '../../files/entities/file.entity';
-import * as bcrypt from 'bcryptjs';
-import { EntityHelper } from 'src/utils/entity-helper';
+import { File } from '../../files/entities/file.entity';
 import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
+import * as bcrypt from 'bcryptjs';
 
-@Entity()
-export class User extends EntityHelper {
-  @PrimaryGeneratedColumn()
+
+@Table({ tableName: 'users' })
+export class User extends Model<User> {
+  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
   id: number;
 
-  @Column({ unique: true, nullable: true })
-  email: string | null;
+  @Column({ type: DataType.STRING, unique: true, allowNull: false })
+  email: string;
 
-  @Column({ nullable: true })
+  @Column({ type: DataType.STRING, allowNull: false })
   password: string;
 
-  public previousPassword: string;
-
-  @AfterLoad()
-  public loadPreviousPassword(): void {
-    this.previousPassword = this.password;
-  }
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async setPassword() {
-    if (this.previousPassword !== this.password && this.password) {
+  @BeforeCreate
+  @BeforeUpdate
+  static async setPassword(user: User) {
+    if (user.password) {
       const salt = await bcrypt.genSalt();
-      this.password = await bcrypt.hash(this.password, salt);
+      user.password = await bcrypt.hash(user.password, salt);
     }
   }
 
-  @Column({ default: AuthProvidersEnum.email })
+  @Column({ type: DataType.STRING, defaultValue: AuthProvidersEnum.email })
   provider: string;
 
-  @Index()
-  @Column({ nullable: true })
-  socialId: string | null;
+  @Column({ type: DataType.STRING, allowNull: true })
+  socialId: string;
 
-  @Index()
-  @Column({ nullable: true })
-  firstName: string | null;
+  @Column({ type: DataType.STRING, allowNull: true })
+  firstName: string;
 
-  @Index()
-  @Column({ nullable: true })
-  lastName: string | null;
+  @Column({ type: DataType.STRING, allowNull: true })
+  lastName: string;
 
-  @ManyToOne(() => FileEntity, {
-    eager: true,
+  @Column({ type: DataType.STRING, allowNull: true })
+  hash: string;
+
+  @ForeignKey(() => File)
+  @Column({
+    type: DataType.UUID,
+    allowNull: true,
   })
-  photo?: FileEntity | null;
+  photoId: string;
 
-  @ManyToOne(() => Role, {
-    eager: true,
+  @BelongsTo(() => File)
+  photo?: File;
+
+  @ForeignKey(() => Role)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  role?: Role | null;
+  roleId: number;
 
-  @ManyToOne(() => Status, {
-    eager: true,
+  @BelongsTo(() => Role)
+  role: Role;
+
+  @ForeignKey(() => Status)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  status?: Status;
+  statusId: number;
 
-  @Column({ nullable: true })
-  @Index()
-  hash: string | null;
+  @BelongsTo(() => Status)
+  status: Status;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreatedAt public createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdatedAt public updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeletedAt public deletedAt: Date;
 }

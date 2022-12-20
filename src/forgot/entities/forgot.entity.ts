@@ -1,35 +1,36 @@
 import {
+  Table,
   Column,
-  CreateDateColumn,
-  Entity,
-  Index,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  DeleteDateColumn,
-} from 'typeorm';
+  Model,
+  DataType,
+  ForeignKey,
+  BelongsTo,
+  CreatedAt,
+  UpdatedAt,
+} from 'sequelize-typescript';
 import { User } from '../../users/entities/user.entity';
 import { Allow } from 'class-validator';
-import { EntityHelper } from 'src/utils/entity-helper';
 
-@Entity()
-export class Forgot extends EntityHelper {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'forgot' })
+export class Forgot extends Model<Forgot> {
+  @Column({ autoIncrement: true, primaryKey: true })
   id: number;
 
   @Allow()
-  @Column()
-  @Index()
+  @Column({ type: DataType.STRING, allowNull: false })
   hash: string;
 
-  @Allow()
-  @ManyToOne(() => User, {
-    eager: true,
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
+  userId: number;
+
+  @BelongsTo(() => User)
   user: User;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreatedAt public createdAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @UpdatedAt public updatedAt: Date;
 }

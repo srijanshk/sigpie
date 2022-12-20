@@ -3,7 +3,6 @@ import { Type } from "class-transformer";
 import { IsIn, IsJSON, IsNotEmpty, IsNumber, IsOptional, IsString, Validate } from "class-validator";
 import { Status } from "src/statuses/entities/status.entity";
 import { User } from "src/users/entities/user.entity";
-import { IsExist } from "src/utils/validators/is-exists.validator";
 import { SignalData } from "../entities/signal-data.entity";
 
 export class CreateSignalDataInput {
@@ -60,21 +59,14 @@ export class CreateSignalDto  {
     @IsIn(['private', 'public', 'followers'])
     privacy: string;
 
-    @ApiProperty({ type: User })
-    @Validate(IsExist, ['User', 'id'], {
-      message: 'User Does not exist',
-    })
-    owner: User;
+    @ApiProperty({ example: 2 })
+    ownerId: number;
 
-    @ApiProperty({ type: Status })
-    @Validate(IsExist, ['Status', 'id'], {
-      message: 'statusNotExists',
-    })
-    status?: Status;
+    @ApiProperty({ example: 2 })
+    statusId: number;
 
-    @ApiProperty({ type: SignalData })
-    @Type(() => CreateSignalDataInput)
-    signalData: CreateSignalDataInput;
+    @ApiProperty({ example: 12 })
+    signalDataId: number;
 
 }
 

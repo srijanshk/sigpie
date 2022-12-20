@@ -122,8 +122,8 @@ export class AuthService {
         lastName: socialData.lastName,
         socialId: socialData.id,
         provider: authProvider,
-        role,
-        status,
+        roleId: role.id,
+        statusId: status.id,
       });
 
       user = await this.usersService.findOne({
@@ -151,12 +151,8 @@ export class AuthService {
     const user = await this.usersService.create({
       ...dto,
       email: dto.email,
-      role: {
-        id: RoleEnum.user,
-      } as Role,
-      status: {
-        id: StatusEnum.inactive,
-      } as Status,
+      roleId: RoleEnum.user,
+      statusId: StatusEnum.inactive,
       hash,
     });
 
@@ -212,7 +208,7 @@ export class AuthService {
         .digest('hex');
       await this.forgotService.create({
         hash,
-        user,
+        userId: user.id,
       });
 
       // await this.mailService.forgotPassword({

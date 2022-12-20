@@ -1,30 +1,32 @@
 import {
+  Table,
   Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  AfterLoad,
-  AfterInsert,
-} from 'typeorm';
+  Model,
+  DataType,
+  AfterCreate,
+} from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
-import { EntityHelper } from 'src/utils/entity-helper';
 import appConfig from '../../config/app.config';
 
-@Entity({ name: 'file' })
-export class FileEntity extends EntityHelper {
+@Table({ tableName: 'files' })
+export class File extends Model<File> {
   @ApiProperty({ example: 'cbcfa8b8-3a25-4adb-a9c6-e325f0d0f3ae' })
-  @PrimaryGeneratedColumn('uuid')
+  @Column({
+    type: DataType.UUID,
+    defaultValue: DataType.UUIDV4,
+    primaryKey: true,
+  })
   id: string;
 
   @Allow()
-  @Column()
+  @Column({ type: DataType.STRING })
   path: string;
 
-  @AfterLoad()
-  @AfterInsert()
-  updatePath() {
-    if (this.path.indexOf('/') === 0) {
-      this.path = appConfig().backendDomain + this.path;
+  @AfterCreate
+  static updatePath(file: File) {
+    if (file.path.indexOf('/') === 0) {
+      file.path = appConfig().backendDomain + file.path;
     }
   }
 }

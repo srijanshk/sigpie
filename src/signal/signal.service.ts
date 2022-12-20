@@ -1,14 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { randomUUID } from 'crypto';
-import { userInfo } from 'os';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { AuthService } from 'src/auth/auth.service';
 import { TradingViewLogService } from 'src/tradingViewLog/trading-view-log.service';
 import { User } from 'src/users/entities/user.entity';
-import { Equal, Not, Repository } from 'typeorm';
 import { CreateSignalDto, CreateSignalPayload } from './dto/create-signal.dto';
 import {
-  CreateTradingViewLog,
+  CreateTradingViewLogInput,
   TradingViewLogInput,
 } from './dto/trading-view-log.dto';
 import { SignalData } from './entities/signal-data.entity';
@@ -21,14 +17,14 @@ export class SignalService {
     private tradingViewLogService: TradingViewLogService,
     private authService: AuthService,
 
-    @InjectRepository(SignalData)
-    private signalDataRepository: Repository<SignalData>,
+    @Inject('SignalData')
+    private signalDataRepository: typeof SignalData,
 
-    @InjectRepository(UserSignalToken)
-    private signalUserTokenRepository: Repository<UserSignalToken>,
+    @Inject('UserSignalToken')
+    private signalUserTokenRepository: typeof UserSignalToken,
 
-    @InjectRepository(Signal)
-    private signalRepository: Repository<Signal>,
+    @Inject('Signal')
+    private signalRepository: typeof Signal,
   ) {}
 
   async getSignalFromTA(data: TradingViewLogInput) {
@@ -40,9 +36,9 @@ export class SignalService {
         if (isExisting) {
           const payload = {
             meta: data.meta,
-            user: isExisting.user,
-            signal: isExisting.signal,
-          } as CreateTradingViewLog;
+            userId: isExisting.user.id,
+            signalId: isExisting.signal.id,
+          };
 
           console.log(payload);
           this.tradingViewLogService.create(payload);
@@ -78,43 +74,38 @@ export class SignalService {
         takeProfit: createSignal.takeProfit,
       };
 
-      const signalData = this.signalDataRepository.create({ ...dataPayload });
-      await this.signalDataRepository.save(signalData);
+      const signalData = await this.signalDataRepository.create({ ...dataPayload });
 
       if (signalData) {
         const payload = {
           signalName: createSignal.signalName,
           signalDescription: createSignal.signalDescription,
-          signalData: signalData,
+          signalDataId: signalData.id,
           winRate: null,
           privacy: createSignal.privacy,
-          owner: createSignal.owner,
+          ownerId: createSignal.ownerId,
           price: createSignal.price,
-          status: createSignal.status,
+          statusId: createSignal.statusId,
         };
 
-        const signal = this.signalRepository.create(payload);
-        const signalResponse = await this.signalRepository.save(signal);
+        const signal = await this.signalRepository.create({...payload});
 
         if (signal) {
           const token = this.authService.createToken(
-            createSignal.owner.id,
+            signal.ownerId,
             signal.id,
           );
           const userTokenPayload = {
-            user: createSignal.owner,
-            signal,
+            userId: signal.ownerId,
+            signalId: signal.id,
             token,
           };
 
           const userSignalToken =
-            this.signalUserTokenRepository.create(userTokenPayload);
-          const tokenResponse = await this.signalUserTokenRepository.save(
-            userSignalToken,
-          );
+            await this.signalUserTokenRepository.create({...userTokenPayload});
           return {
-            signal: signalResponse,
-            token: tokenResponse.token,
+            signal: signal,
+            token: userSignalToken.token,
           };
         }
       }
@@ -130,15 +121,14 @@ export class SignalService {
   }
 
   async getAllSignal(user: User): Promise<Signal[]> {
-    return this.signalRepository.createQueryBuilder(
-      "signal"
-    )
-    .leftJoin("signal.owner", "owner")
-    .where("owner.id = :userId", {userId: user.id})
-    .execute()
+    return await this.signalRepository.findAll({
+      where: {
+        ownerId: user.id
+      }
+    })
   }
 
   async getSignalById(id: number): Promise<Signal> {
-    return this.signalRepository.findOneBy({id})
+    return this.signalRepository.findOne({where: { id }})
   }
 }

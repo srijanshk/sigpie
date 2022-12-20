@@ -1,17 +1,6 @@
+import { BelongsTo, Column, CreatedAt, DataType, DeletedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript';
 import { Status } from 'src/statuses/entities/status.entity';
 import { User } from 'src/users/entities/user.entity';
-import { EntityHelper } from 'src/utils/entity-helper';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
 import { SignalData } from './signal-data.entity';
 
 export enum SignalPrivacy {
@@ -20,48 +9,61 @@ export enum SignalPrivacy {
     Followers = "followers"
 }
 
-@Entity()
-export class Signal extends EntityHelper {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'signal' })
+export class Signal extends Model<Signal> {
+  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
   id: number;
 
-  @ManyToOne(() => User, {
-    eager: true,
+  @ForeignKey(() => User)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
+  ownerId: number
+
+  @BelongsTo(() => User)
   owner: User;
 
-  @Column({ nullable: false })
+  @Column({ type: DataType.STRING, allowNull: false })
   signalName: string;
 
-  @Column({ nullable: true })
+  @Column({ type: DataType.STRING, allowNull: true })
   signalDescription: string;
   
-  @Column({ nullable: true })
-  price?: number | null;
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  price: number;
 
-  @Column({ nullable: true })
-  winRate?: number | null;
+  @Column({ type: DataType.INTEGER, allowNull: true })
+  winRate: number;
 
-  @Column({ type: "enum" , enum: SignalPrivacy, nullable: false })
+  @Column({ type: DataType.ENUM({
+    values: ['public', 'private', 'followers']
+  }) , allowNull: false })
   privacy: string;
 
-  @ManyToOne(() => Status, {
-    eager: true,
+  @ForeignKey(() => Status)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  status?: Status;
+  statusId: number;
 
-  @OneToOne(() => SignalData, {
-    eager: true,
+  @BelongsTo(() => Status)
+  status: Status;
+
+  @ForeignKey(() => SignalData)
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
   })
-  @JoinColumn()
+  signalDataId: number
+
+  @BelongsTo(() => SignalData)
   signalData: SignalData;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreatedAt public createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdatedAt public updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeletedAt public deletedAt: Date;
 }

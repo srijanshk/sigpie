@@ -14,21 +14,20 @@ import appleConfig from './config/apple.config';
 import * as path from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthAppleModule } from './auth-apple/auth-apple.module';
 import { AuthFacebookModule } from './auth-facebook/auth-facebook.module';
 import { AuthGoogleModule } from './auth-google/auth-google.module';
 import { AuthTwitterModule } from './auth-twitter/auth-twitter.module';
 import { I18nModule } from 'nestjs-i18n/dist/i18n.module';
 import { HeaderResolver } from 'nestjs-i18n';
-import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { MailConfigService } from './mail/mail-config.service';
 import { ForgotModule } from './forgot/forgot.module';
 import { MailModule } from './mail/mail.module';
 import { HomeModule } from './home/home.module';
-import { DataSource } from 'typeorm';
 import { SignalModule } from './signal/signal.module';
 import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
+import { SharedModule } from './shared/shared.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -47,13 +46,9 @@ import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
       ],
       envFilePath: ['.env'],
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: TypeOrmConfigService,
-      dataSourceFactory: async (options) => {
-        const dataSource = await new DataSource(options).initialize();
-        return dataSource;
-      },
-    }),
+
+    // DatabaseModule,
+
     MailerModule.forRootAsync({
       useClass: MailConfigService,
     }),
@@ -74,6 +69,7 @@ import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    SharedModule,
     UsersModule,
     FilesModule,
     AuthModule,
@@ -86,6 +82,7 @@ import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
     HomeModule,
     SignalModule,
     TradingViewLogModule
+
   ],
 })
 export class AppModule {}

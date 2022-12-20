@@ -6,13 +6,15 @@ import { diskStorage } from 'multer';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import * as AWS from 'aws-sdk';
 import * as multerS3 from 'multer-s3';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { FileEntity } from './entities/file.entity';
+import { File } from './entities/file.entity';
 import { FilesService } from './files.service';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FileEntity]),
+    DatabaseModule,
+    // SequelizeModule.forFeature([File]),
     MulterModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -85,6 +87,6 @@ import { FilesService } from './files.service';
     }),
   ],
   controllers: [FilesController],
-  providers: [ConfigModule, ConfigService, FilesService],
+  providers: [ConfigModule, ConfigService, FilesService, { provide: 'File', useValue: File }],
 })
 export class FilesModule {}

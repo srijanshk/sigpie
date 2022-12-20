@@ -1,41 +1,32 @@
+import { BelongsTo, Column, CreatedAt, DataType, DeletedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript';
 import { Signal } from 'src/signal/entities/signal.entity';
 import { User } from 'src/users/entities/user.entity';
-import { EntityHelper } from 'src/utils/entity-helper';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  ManyToMany,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
 
-@Entity()
-export class TradingViewLog extends EntityHelper {
-  @PrimaryGeneratedColumn()
+@Table({ tableName: 'trading-view-log' })
+export class TradingViewLog extends Model<TradingViewLog> {
+  @Column({ primaryKey: true })
   id: number;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: DataType.JSON, allowNull: true })
   meta: any | null;
 
-  @ManyToOne(() => User, {
-    eager: true,
-  })
+  @ForeignKey(() => User)
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  userId: number;
+
+  @BelongsTo(() => User)
   user: User;
 
-  @ManyToOne(() => Signal, {
-    eager: true,
-  })
+  @ForeignKey(() => Signal)
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  signalId: number;
+
+  @BelongsTo(() => User)
   signal: Signal;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreatedAt public createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdatedAt public updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeletedAt public deletedAt: Date;
 }

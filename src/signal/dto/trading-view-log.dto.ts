@@ -1,11 +1,9 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, Validate } from "class-validator";
 import { User } from "src/users/entities/user.entity";
-import { EntityHelper } from "src/utils/entity-helper";
-import { IsExist } from "src/utils/validators/is-exists.validator";
 import { Signal } from "../entities/signal.entity";
 
-export class TradingViewLogInput extends EntityHelper {
+export class TradingViewLogInput {
 
     @ApiProperty({ example: 'User Signal Token'})
     @IsNotEmpty()
@@ -18,20 +16,20 @@ export class TradingViewLogInput extends EntityHelper {
 }
 
 
-export class CreateTradingViewLog extends EntityHelper {
+export class CreateTradingViewLogInput {
     @ApiProperty({ example: "any type"})
     @IsNotEmpty()
     meta: any;
 
-    @ApiProperty({ type: User })
-    @Validate(IsExist, ['User', 'id'], {
-      message: 'User Does not exist',
-    })
-    user: User;
+    @ApiProperty({ example: "1" })
+    // @Validate(IsExist, ['User', 'id'], {
+    //   message: 'User Does not exist',
+    // })
+    userId: number;
 
-    @ApiProperty({ type: Signal })
-    @Validate(IsExist, ['Signal', 'id'], {
-      message: 'Signal Does not exist',
-    })
-    signal: Signal;
+    @ApiProperty({ example: "3" })
+    // @Validate(IsExist, ['Signal', 'id'], {
+    //   message: 'Signal Does not exist',
+    // })
+    signalId: number;
 }

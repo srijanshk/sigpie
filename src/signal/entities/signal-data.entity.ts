@@ -1,44 +1,32 @@
-import { Status } from 'src/statuses/entities/status.entity';
-import { User } from 'src/users/entities/user.entity';
-import { EntityHelper } from 'src/utils/entity-helper';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, CreatedAt, DataType, DeletedAt, Model, Table, UpdatedAt } from 'sequelize-typescript';
 
-@Entity()
-export class SignalData extends EntityHelper {
-  @PrimaryGeneratedColumn()
+
+@Table({ tableName: 'signal-data' })
+export class SignalData extends Model<SignalData> {
+  @Column({ type: DataType.INTEGER, primaryKey: true, autoIncrement: true })
   id: number;
 
-  @Column({ nullable: false })
+  @Column({ type: DataType.STRING , allowNull: false })
   ticker: string;
 
-  @Column({ nullable: false })
+  @Column({ type: DataType.STRING , allowNull: false })
   actionType: string;
   
-  @Column({ nullable: false })
+  @Column({ type: DataType.STRING , allowNull: false })
   orderType: string;
 
-  @Column({ nullable: false })
+  @Column({ type: DataType.INTEGER , allowNull: false })
   stopLoss: number;
   
-  @Column({ nullable: false })
+  @Column({ type: DataType.INTEGER , allowNull: false })
   takeProfit: number;
 
-  @Column({ type: 'json', nullable: true })
+  @Column({ type: DataType.JSON , allowNull: false })
   meta: any;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @CreatedAt public createdAt: Date;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+  @UpdatedAt public updatedAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date;
+  @DeletedAt public deletedAt: Date;
 }

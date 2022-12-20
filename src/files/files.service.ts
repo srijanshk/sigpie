@@ -1,18 +1,16 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FileEntity } from './entities/file.entity';
-import { Repository } from 'typeorm';
+import { File } from './entities/file.entity';
 
 @Injectable()
 export class FilesService {
   constructor(
     private readonly configService: ConfigService,
-    @InjectRepository(FileEntity)
-    private fileRepository: Repository<FileEntity>,
+    @Inject('File')
+    private fileRepository: typeof File,
   ) {}
 
-  async uploadFile(file): Promise<FileEntity> {
+  async uploadFile(file): Promise<File> {
     if (!file) {
       throw new HttpException(
         {
@@ -30,10 +28,8 @@ export class FilesService {
       s3: file.location,
     };
 
-    return this.fileRepository.save(
-      this.fileRepository.create({
-        path: path[this.configService.get('file.driver')],
-      }),
-    );
+    return this.fileRepository.create({
+      path: path[this.configService.get('file.driver')],
+    });
   }
 }

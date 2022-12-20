@@ -1,16 +1,16 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo  } from 'sequelize-typescript';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
-import { EntityHelper } from 'src/utils/entity-helper';
 
-@Entity()
-export class Status extends EntityHelper {
+@Table({ tableName: 'status' })
+
+export class Status extends Model<Status> {
   @ApiProperty({ example: 1 })
-  @PrimaryColumn()
+  @Column({ autoIncrement: true, primaryKey: true })
   id: number;
 
   @Allow()
   @ApiProperty({ example: 'Active' })
-  @Column()
-  name?: string;
+  @Column({ type: DataType.STRING })
+  name: string;
 }
