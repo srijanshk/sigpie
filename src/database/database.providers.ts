@@ -8,14 +8,14 @@ import { Signal } from 'src/signal/entities/signal.entity';
 import { Status } from 'src/statuses/entities/status.entity';
 import { TradingViewLog } from 'src/tradingViewLog/entities/trading-view.entity';
 import { User } from 'src/users/entities/user.entity';
-import { ConfigService } from './../shared/config/config.service';
+import { SharedConfigService } from './../shared/config/config.service';
 
 export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
-    inject: [ConfigService],
+    inject: [SharedConfigService],
     imports: [SharedModule],
-    useFactory: (configService: ConfigService) => {
+    useFactory: (configService: SharedConfigService) => {
       const sequelize = new Sequelize(configService.sequelizeOrmConfig);
       sequelize.addModels([
         User,
