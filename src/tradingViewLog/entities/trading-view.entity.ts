@@ -3,7 +3,6 @@ import {
   Column,
   CreatedAt,
   DataType,
-  DeletedAt,
   ForeignKey,
   Model,
   Table,
@@ -37,6 +36,4 @@ export class TradingViewLog extends Model<TradingViewLog> {
   @CreatedAt public createdAt: Date;
 
   @UpdatedAt public updatedAt: Date;
-
-  @DeletedAt public deletedAt: Date;
 }
