@@ -21,7 +21,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "env-cmd jest --config ./test/jest-e2e.json",
     "migration:create": "npx sequelize migration:create",
-    "migration:run": "npx sequelize-cli db:migrate"
+    "migration:run": "npx sequelize-cli db:migrate",
+    "migration:run:prod": "npx sequelize-cli db:migrate --env production"
   },
   "dependencies": {
     "@nestjs-modules/mailer": "1.8.1",
