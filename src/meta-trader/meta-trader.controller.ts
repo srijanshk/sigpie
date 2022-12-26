@@ -22,7 +22,7 @@ export class MetaTraderController {
   }
 
   @SubscribeMessage('send_message')
- listenForMessages(
+  listenForMessages(
     @MessageBody() content: string,
     @ConnectedSocket() socket: Socket,
   ) {
