@@ -27,6 +27,7 @@ import { HomeModule } from './home/home.module';
 import { SignalModule } from './signal/signal.module';
 import { TradingViewLogModule } from './tradingViewLog/trading-view-log.module';
 import { SharedModule } from './shared/shared.module';
+import { MetaTraderModule } from './meta-trader/meta-trader.module';
 
 @Module({
   imports: [
@@ -45,9 +46,6 @@ import { SharedModule } from './shared/shared.module';
       ],
       envFilePath: ['.env'],
     }),
-
-    // DatabaseModule,
-
     MailerModule.forRootAsync({
       useClass: MailConfigService,
     }),
@@ -81,6 +79,7 @@ import { SharedModule } from './shared/shared.module';
     HomeModule,
     SignalModule,
     TradingViewLogModule,
+    MetaTraderModule,
   ],
 })
 export class AppModule {}
