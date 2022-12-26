@@ -31,6 +31,7 @@ export class AuthController {
   @Post('email/login')
   @HttpCode(HttpStatus.OK)
   public async login(@Body() loginDto: AuthEmailLoginDto) {
+    console.log(loginDto);
     return this.service.validateLogin(loginDto);
   }
 

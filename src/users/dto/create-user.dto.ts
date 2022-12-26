@@ -14,17 +14,19 @@ export class CreateUserDto {
   password?: string;
 
   @ApiProperty()
+  @MinLength(3)
+  userName: string;
+
+  @ApiProperty()
   provider?: string;
 
   @ApiProperty()
   socialId?: string;
 
   @ApiProperty({ example: 'John' })
-  @IsNotEmpty()
   firstName: string;
 
   @ApiProperty({ example: 'Doe' })
-  @IsNotEmpty()
   lastName: string;
 
   @ApiProperty({ example: 'id' })

@@ -30,6 +30,7 @@ export class AuthService {
   async validateLogin(
     loginDto: AuthEmailLoginDto,
   ): Promise<{ token: string; user: User }> {
+    console.log(loginDto);
     const user = await this.usersService.findOne({
       email: loginDto.email,
     });
@@ -116,6 +117,7 @@ export class AuthService {
 
       user = await this.usersService.create({
         email: socialEmail,
+        userName: user.userName,
         firstName: socialData.firstName,
         lastName: socialData.lastName,
         socialId: socialData.id,
