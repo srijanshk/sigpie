@@ -17,6 +17,7 @@ export class MetaTraderController {
   server: Server;
 
   handleConnection(client: any) {
+    console.log('client connected');
     // Send a message to the client when the socket is successfully connected
     client.emit('connected', 'Hello, client! You are connected to the server.');
   }
