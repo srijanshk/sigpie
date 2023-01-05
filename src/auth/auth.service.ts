@@ -17,6 +17,7 @@ import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
 import { UsersService } from 'src/users/users.service';
 import { ForgotService } from 'src/forgot/forgot.service';
 import { MailService } from 'src/mail/mail.service';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,6 @@ export class AuthService {
   async validateLogin(
     loginDto: AuthEmailLoginDto,
   ): Promise<{ token: string; user: User }> {
-    console.log(loginDto);
     const user = await this.usersService.findOne({
       email: loginDto.email,
     });
@@ -39,9 +39,8 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            email: 'notFound',
-          },
+          errors:
+            'Email address and Password donot match. Check the information and try again.',
         },
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
@@ -51,9 +50,7 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            email: `needLoginViaProvider:${user.provider}`,
-          },
+          errors: `needLoginViaProvider:${user.provider}`,
         },
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
@@ -75,9 +72,8 @@ export class AuthService {
       throw new HttpException(
         {
           status: HttpStatus.UNPROCESSABLE_ENTITY,
-          errors: {
-            password: 'incorrectPassword',
-          },
+          errors:
+            'Email address and Password donot match. Check the information and try again.',
         },
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
@@ -142,19 +138,40 @@ export class AuthService {
     };
   }
 
-  async register(dto: AuthRegisterLoginDto): Promise<void> {
+  async register(
+    dto: AuthRegisterLoginDto,
+  ): Promise<{ status: number; message: string }> {
     const hash = crypto
       .createHash('sha256')
       .update(randomStringGenerator())
       .digest('hex');
 
-    await this.usersService.create({
+    const user = await this.usersService.findOne({
+      [Op.or]: [{ email: dto.email }, { userName: dto.userName }],
+    });
+
+    if (user) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          error: 'User Already Registered',
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const createdUser = await this.usersService.create({
       ...dto,
       email: dto.email,
       roleId: RoleEnum.user,
       statusId: StatusEnum.inactive,
       hash,
     });
+
+    return {
+      status: HttpStatus.CREATED,
+      message: 'User Registered Successfully',
+    };
 
     // await this.mailService.userSignUp({
     //   to: user.email,
