@@ -58,8 +58,9 @@ export class SignalService {
     }
   }
 
-  async createSignal(createSignal: CreateSignalPayload) {
+  async createSignal(createSignal: CreateSignalPayload, request: any) {
     try {
+      const ownerId = request.user.id
       const dataPayload = {
         ticker: createSignal.ticker,
         actionType: createSignal.actionType,
@@ -80,9 +81,9 @@ export class SignalService {
           signalDataId: signalData.id,
           winRate: null,
           privacy: createSignal.privacy,
-          ownerId: createSignal.ownerId,
+          ownerId: ownerId,
           price: createSignal.price,
-          statusId: createSignal.statusId,
+          statusId: 1,
         };
 
         const signal = await this.signalRepository.create({ ...payload });
@@ -99,6 +100,7 @@ export class SignalService {
             ...userTokenPayload,
           });
           return {
+            message: "Created Signal Successfully",
             signal: signal,
             token: userSignalToken.token,
           };

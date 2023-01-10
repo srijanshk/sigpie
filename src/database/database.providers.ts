@@ -5,6 +5,7 @@ import { Role } from 'src/roles/entities/role.entity';
 import { SharedModule } from 'src/shared/shared.module';
 import { SignalData } from 'src/signal/entities/signal-data.entity';
 import { Signal } from 'src/signal/entities/signal.entity';
+import { UserSignalToken } from 'src/signal/entities/user-signal-token.entity';
 import { Status } from 'src/statuses/entities/status.entity';
 import { TradingViewLog } from 'src/tradingViewLog/entities/trading-view.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -26,6 +27,7 @@ export const databaseProviders = [
         File,
         Status,
         Role,
+        UserSignalToken
       ]);
       return sequelize;
     },

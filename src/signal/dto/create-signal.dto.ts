@@ -23,6 +23,7 @@ export class CreateSignalDataInput {
   @ApiProperty({ example: 'Order Type' })
   @IsNotEmpty()
   @IsString()
+  @IsIn(['buy', 'sell'])
   orderType: string;
 
   @ApiProperty({ example: 'stop loss at' })
@@ -37,7 +38,8 @@ export class CreateSignalDataInput {
 
   @ApiProperty({ example: 'Contains other data type' })
   @IsJSON()
-  meta: any;
+  @IsOptional()
+  meta?: any;
 }
 
 export class CreateSignalDto {
@@ -61,12 +63,6 @@ export class CreateSignalDto {
   @IsString()
   @IsIn(['private', 'public', 'followers'])
   privacy: string;
-
-  @ApiProperty({ example: 2 })
-  ownerId: number;
-
-  @ApiProperty({ example: 2 })
-  statusId: number;
 
   @ApiProperty({ example: 12 })
   signalDataId: number;

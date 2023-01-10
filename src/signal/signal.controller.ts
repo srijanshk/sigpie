@@ -33,8 +33,8 @@ export class SignalController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  createSignal(@Body() createSignalDto: CreateSignalPayload) {
-    return this.signalService.createSignal(createSignalDto);
+  createSignal(@Request() request, @Body() createSignalDto: CreateSignalPayload) {
+    return this.signalService.createSignal(createSignalDto, request);
   }
 
   @ApiBearerAuth()
