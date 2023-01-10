@@ -100,6 +100,7 @@ export class SignalService {
             ...userTokenPayload,
           });
           return {
+            status: HttpStatus.CREATED,
             message: "Created Signal Successfully",
             signal: signal,
             token: userSignalToken.token,
