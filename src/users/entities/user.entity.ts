@@ -10,12 +10,15 @@ import {
   UpdatedAt,
   BeforeCreate,
   BeforeUpdate,
+  BelongsToMany,
+  HasMany,
 } from 'sequelize-typescript';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
 import { File } from '../../files/entities/file.entity';
 import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
 import * as bcrypt from 'bcryptjs';
+import { Followers } from './followers.entity';
 
 @Table({ tableName: 'users' })
 export class User extends Model<User> {
@@ -84,6 +87,12 @@ export class User extends Model<User> {
 
   @BelongsTo(() => Status)
   status: Status;
+
+  @BelongsToMany(() => User, { through: () => Followers, as: 'Follower', foreignKey: 'followerId' })
+  followers: User[];
+  
+  @BelongsToMany(() => User, { through: () => Followers, as: 'Following', foreignKey: 'followingId' })
+  following: User[];
 
   @CreatedAt public createdAt: Date;
 

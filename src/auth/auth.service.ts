@@ -164,7 +164,7 @@ export class AuthService {
       ...dto,
       email: dto.email,
       roleId: RoleEnum.user,
-      statusId: StatusEnum.inactive,
+      statusId: StatusEnum.active,
       hash,
     });
 
@@ -263,9 +263,7 @@ export class AuthService {
   }
 
   async me(user: User): Promise<User> {
-    return this.usersService.findOne({
-      id: user.id,
-    });
+    return this.usersService.findOneWithId(user.id);
   }
 
   async update(user: User, userDto: AuthUpdateDto): Promise<User> {

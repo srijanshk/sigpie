@@ -8,6 +8,7 @@ import { Signal } from 'src/signal/entities/signal.entity';
 import { UserSignalToken } from 'src/signal/entities/user-signal-token.entity';
 import { Status } from 'src/statuses/entities/status.entity';
 import { TradingViewLog } from 'src/tradingViewLog/entities/trading-view.entity';
+import { Followers } from 'src/users/entities/followers.entity';
 import { User } from 'src/users/entities/user.entity';
 import { SharedConfigService } from './../shared/config/config.service';
 
@@ -27,7 +28,8 @@ export const databaseProviders = [
         File,
         Status,
         Role,
-        UserSignalToken
+        UserSignalToken,
+        Followers
       ]);
       return sequelize;
     },
