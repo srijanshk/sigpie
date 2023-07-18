@@ -22,7 +22,6 @@ export class UsersService {
   findOneWithId(id: number) {
     try {
       return this.usersModel.findOne({
-        logging: console.log,
         where: { id: id },
         attributes: [
           'id',
